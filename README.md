@@ -40,3 +40,15 @@ Run:
 ```
 ./blog-to-twitter
 ```
+
+Use another config file:
+
+```
+./blog-to-twitter -c path/to/config.yml
+```
+
+Dry run. Don't publish tweets
+
+```
+./blog-to-twitter --dry
+```

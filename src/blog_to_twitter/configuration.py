@@ -1,8 +1,13 @@
+import os
+
 import yaml
 
 
 class Configuration:
     def __init__(self, config_file='config.yml'):
+        if not os.path.isfile(config_file):
+            raise Exception('File {} not found'.format(config_file))
+
         self.config_file = config_file
         self.cfg = None
         self.load()

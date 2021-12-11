@@ -1,12 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys
 
 from src.blog_to_twitter.configuration import Configuration
 from src.blog_to_twitter.reader import Reader
 from src.blog_to_twitter.twbot import TwBot
 
 if __name__ == '__main__':
-    conf = Configuration()
+    conf = None
+    config_file = None
+    dry = False
+
+    options = sys.argv[1:]
+
+    for index, option in enumerate(options):
+        if option == '-c':
+            config_file = options[index + 1]
+        if option == '--dry':
+            dry = True
+
+    try:
+        conf = Configuration(config_file or 'config.yml')
+    except Exception as e:
+        print(e)
+        exit(1)
 
     twBot = TwBot(
         conf.consumer_key(),
@@ -21,10 +38,15 @@ if __name__ == '__main__':
 
     print('Announce in twitter articles published in {} in the last {} days.'.format(conf.name(), conf.days()))
     print('-' * 80)
+    if dry:
+        print('DRY mode. No tweets will be published.')
+        print('-' * 80)
+
     for entry in entries:
         message = 'Publicado el artículo: {} {}'.format(entry.title, entry.link)
         print(message)
-        twBot.say(message)
+        if not dry:
+            twBot.say(message)
     else:
         print('-' * 80)
         print('Finished.')

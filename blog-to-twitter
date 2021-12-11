@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from src.blog_to_twitter.configuration import Configuration
+from src.blog_to_twitter.reader import Reader
+from src.blog_to_twitter.twbot import TwBot
+
+if __name__ == '__main__':
+    configuration = Configuration()
+    twBot = TwBot(configuration)
+    reader = Reader(configuration.uri())
+
+    entries = reader.new_entries(days=configuration.days())
+
+    print('Announce in twitter articles published in {} in the last {} days.'.format(configuration.name(), configuration.days()))
+    print('-' * 80)
+    for entry in entries:
+        message = 'Publicado el artículo: {} {}'.format(entry.title, entry.link)
+        print(message)
+        # twBot.say(message)
+    else:
+        print('-' * 80)
+        print('Finished.')
+

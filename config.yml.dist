@@ -1,0 +1,10 @@
+twitter:
+    consumer_key: twitter_api_consumer_key
+    consumer_secret: twitter_api_consumer_secret
+    access_token: twitter_api_access_token
+    access_token_secret: twitter_api_access_token_secret
+
+feed:
+    name: name_of_the_site
+    uri: absolute_uri_to_feed
+    days: 1

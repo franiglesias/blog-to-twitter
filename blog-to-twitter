@@ -28,3 +28,5 @@ if __name__ == '__main__':
     else:
         print('-' * 80)
         print('Finished.')
+
+    exit(0)

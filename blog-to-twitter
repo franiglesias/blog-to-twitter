@@ -6,19 +6,25 @@ from src.blog_to_twitter.reader import Reader
 from src.blog_to_twitter.twbot import TwBot
 
 if __name__ == '__main__':
-    configuration = Configuration()
-    twBot = TwBot(configuration)
-    reader = Reader(configuration.uri())
+    conf = Configuration()
 
-    entries = reader.new_entries(days=configuration.days())
+    twBot = TwBot(
+        conf.consumer_key(),
+        conf.consumer_secret(),
+        conf.access_token(),
+        conf.access_token_secret()
+    )
 
-    print('Announce in twitter articles published in {} in the last {} days.'.format(configuration.name(), configuration.days()))
+    reader = Reader(conf.uri())
+
+    entries = reader.new_entries(days=conf.days())
+
+    print('Announce in twitter articles published in {} in the last {} days.'.format(conf.name(), conf.days()))
     print('-' * 80)
     for entry in entries:
         message = 'Publicado el artículo: {} {}'.format(entry.title, entry.link)
         print(message)
-        # twBot.say(message)
+        twBot.say(message)
     else:
         print('-' * 80)
         print('Finished.')
-

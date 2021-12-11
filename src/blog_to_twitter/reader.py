@@ -16,16 +16,6 @@ class Reader:
         feed = feedparser.parse(self.uri)
         self.entries = feed.entries
 
-    def last(self):
-        return self.last_entry().title
-
-    def last_entry(self):
-        return self.entries[0]
-
     def new_entries(self, days=0):
         self.load()
         return filter(lambda entry: entry.published_parsed > last_days(days), self.entries)
-
-    def updated_entries(self, days=0):
-        self.load()
-        return filter(lambda entry: entry.updated_parsed > last_days(days) and entry.published_parsed <= last_days(days), self.entries)

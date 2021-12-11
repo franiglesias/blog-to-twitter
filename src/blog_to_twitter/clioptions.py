@@ -1,10 +1,11 @@
 import sys
 
 
-class Options:
+class CliOptions:
     def __init__(self):
         self.config_file = 'config.yml'
         self.dry = False
+        self.days = None
         self.load()
 
     def load(self):
@@ -15,3 +16,5 @@ class Options:
                 self.config_file = cli_options[index + 1]
             if option == '--dry':
                 self.dry = True
+            if option == '--days':
+                self.days = int(cli_options[index + 1])

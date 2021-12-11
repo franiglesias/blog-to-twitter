@@ -2,21 +2,22 @@
 # -*- coding: utf-8 -*-
 
 from src.blog_to_twitter.configuration import Configuration
-from src.blog_to_twitter.options import Options
+from src.blog_to_twitter.clioptions import CliOptions
+from src.blog_to_twitter.publisher import Publisher
 from src.blog_to_twitter.reader import Reader
 from src.blog_to_twitter.twbot import TwBot
 
 if __name__ == '__main__':
     conf = None
-    options = Options()
+    options = CliOptions()
 
     try:
-        conf = Configuration(options.config_file)
+        conf = Configuration(options)
     except Exception as e:
         print(e)
         exit(1)
 
-    twBot = TwBot(
+    twitter_bot = TwBot(
         conf.consumer_key(),
         conf.consumer_secret(),
         conf.access_token(),
@@ -25,21 +26,8 @@ if __name__ == '__main__':
 
     reader = Reader(conf.uri())
 
-    entries = reader.new_entries(days=conf.days())
+    publisher = Publisher(reader, twitter_bot, conf, options)
 
-    print('Announce in twitter articles published in {} in the last {} days.'.format(conf.name(), conf.days()))
-    print('-' * 80)
-    if options.dry:
-        print('DRY mode. No tweets will be published.')
-        print('-' * 80)
-
-    for entry in entries:
-        message = 'Publicado el artículo: {} {}'.format(entry.title, entry.link)
-        print(message)
-        if not options.dry:
-            twBot.say(message)
-    else:
-        print('-' * 80)
-        print('Finished.')
+    publisher.get_and_publish_posts()
 
     exit(0)

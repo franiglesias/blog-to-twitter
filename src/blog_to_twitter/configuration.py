@@ -4,13 +4,15 @@ import yaml
 
 
 class Configuration:
-    def __init__(self, config_file='config.yml'):
-        if not os.path.isfile(config_file):
-            raise Exception('File {} not found'.format(config_file))
+    def __init__(self, options):
 
-        self.config_file = config_file
+        if not os.path.isfile(options.config_file):
+            raise Exception('File {} not found'.format(options.config_file))
+
+        self.config_file = options.config_file
         self.cfg = None
         self.load()
+        self.override_with_cli(options)
 
     def load(self):
         with open(self.config_file, "r") as file:
@@ -36,3 +38,10 @@ class Configuration:
 
     def name(self):
         return self.cfg['feed']['name']
+
+    def override_with_cli(self, options):
+        if options.days:
+            self.override_days(options.days)
+
+    def override_days(self, days):
+        self.cfg['feed']['days'] = days

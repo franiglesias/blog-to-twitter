@@ -2,20 +2,14 @@ import yaml
 
 
 class Configuration:
-    def __init__(self):
+    def __init__(self, config_file='config.yml'):
+        self.config_file = config_file
         self.cfg = None
         self.load()
 
     def load(self):
-        with open('config.yml', "r") as f:
-            self.cfg = yaml.safe_load(f)
-
-        self.cfg['twitter']['consumer_key']
-        self.cfg['twitter']['consumer_secret']
-        self.cfg['twitter']['access_token']
-        self.cfg['twitter']['access_token_secret']
-        self.cfg['feed']['uri']
-        self.cfg['feed']['days']
+        with open(self.config_file, "r") as file:
+            self.cfg = yaml.safe_load(file)
 
     def consumer_key(self):
         return self.cfg['twitter']['consumer_key']

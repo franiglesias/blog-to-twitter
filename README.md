@@ -52,3 +52,9 @@ Dry run. Don't publish tweets
 ```
 ./blog-to-twitter --dry
 ```
+
+## Overriding configuration
+
+You can override some data in configuration by passing command line options.
+
+**--days**: overrides the number of days since new posts are selected
